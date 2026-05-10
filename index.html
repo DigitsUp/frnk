@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRNK × DigitsUp — Summer 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;1,300;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #f9f6f0;
+    --sand: #c9b690;
+    --sand-dark: #a08868;
+    --ink: #1a1714;
+    --ink-light: #3d3630;
+    --warm-gray: #8c8278;
+    --black: #0d0c0b;
+    --white: #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Manrope', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ─── PASSWORD GATE ─── */
+  #gate {
+    position: fixed;
+    inset: 0;
+    background: var(--cream);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease;
+  }
+  #gate.hidden { opacity: 0; pointer-events: none; }
+
+  .gate-wordmark {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 300;
+    font-size: 0.75rem;
+    letter-spacing: 0.35em;
+    color: var(--warm-gray);
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+  }
+
+  .gate-title {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  .gate-subtitle {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    color: var(--warm-gray);
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  .gate-input-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .gate-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--sand);
+    padding: 0.75rem 1rem;
+    font-family: 'Manrope', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.3em;
+    color: var(--ink);
+    text-align: center;
+    width: 200px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .gate-input:focus { border-color: var(--ink); }
+  .gate-input::placeholder { color: var(--warm-gray); letter-spacing: 0.2em; font-size: 0.8rem; }
+
+  .gate-btn {
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+    padding: 0.85rem 2.5rem;
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+  }
+  .gate-btn:hover { background: var(--sand-dark); }
+  .gate-btn:active { transform: scale(0.98); }
+
+  .gate-error {
+    font-size: 0.75rem;
+    color: #c0392b;
+    letter-spacing: 0.1em;
+    opacity: 0;
+    transition: opacity 0.3s;
+    margin-top: -0.5rem;
+  }
+  .gate-error.show { opacity: 1; }
+
+  .gate-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--sand);
+    margin: 2rem auto;
+  }
+
+  /* ─── MAIN CONTENT ─── */
+  #main {
+    opacity: 0;
+    transition: opacity 1s ease 0.3s;
+  }
+  #main.visible { opacity: 1; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    padding: 2rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-wordmark {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 300;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: rgba(255,255,255,0.85);
+    text-transform: uppercase;
+  }
+
+  .nav-meta {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 700px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('./photos/frnk-photo-5.jpg');
+    background-size: cover;
+    background-position: center 20%;
+    transform: scale(1.05);
+    transition: transform 8s ease;
+  }
+  .hero-bg.loaded { transform: scale(1); }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(13, 12, 11, 0.75) 0%,
+      rgba(13, 12, 11, 0.3) 50%,
+      rgba(13, 12, 11, 0.1) 100%
+    );
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 4rem 3rem 5rem;
+    max-width: 800px;
+  }
+
+  .hero-headline {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    color: var(--white);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-subhead {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 300;
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    color: rgba(255,255,255,0.8);
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    max-width: 520px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .hero-meta-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--sand);
+    text-transform: uppercase;
+  }
+
+  .hero-meta-value {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.9);
+    font-weight: 300;
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    padding: 6rem 3rem;
+  }
+
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: var(--sand-dark);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .section-headline {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-body {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--ink-light);
+    max-width: 600px;
+    font-weight: 300;
+  }
+
+  .max-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ─── STORY: THREE ACTS ─── */
+  .story-section {
+    background: var(--cream);
+  }
+
+  .acts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    margin-top: 4rem;
+    margin-bottom: 5rem;
+  }
+
+  .act-card {
+    background: var(--white);
+    padding: 2.5rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .act-card.revealed { opacity: 1; transform: translateY(0); }
+  .act-card:nth-child(2) { transition-delay: 0.15s; }
+  .act-card:nth-child(3) { transition-delay: 0.3s; }
+
+  .act-number {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 0.75rem;
+    color: var(--sand);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+  }
+
+  .act-year {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 2rem;
+    color: var(--ink);
+    margin-bottom: 0.25rem;
+  }
+
+  .act-title {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e8e2d8;
+  }
+
+  .act-body {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--ink-light);
+    font-weight: 300;
+  }
+
+  .act-stat {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--ink);
+    margin-top: 1.25rem;
+  }
+
+  /* Sessions Chart */
+  .chart-wrap {
+    background: var(--white);
+    padding: 3rem;
+    margin-bottom: 2rem;
+  }
+
+  .chart-title {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 2.5rem;
+  }
+
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    height: 200px;
+  }
+
+  .bar-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+
+  .bar-label-top {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--warm-gray);
+    text-transform: uppercase;
+    text-align: center;
+    min-height: 2em;
+    display: flex;
+    align-items: center;
+  }
+
+  .bar {
+    width: 100%;
+    background: #e8e2d8;
+    transition: height 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    height: 0;
+    position: relative;
+  }
+
+  .bar.gold { background: var(--sand); }
+  .bar.faded { background: #d5cdc0; }
+
+  .bar-value {
+    position: absolute;
+    top: -1.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  .bar-year {
+    font-size: 0.75rem;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .chart-takeaway {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e8e2d8;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--ink);
+    font-weight: 300;
+  }
+
+  /* ─── PRODUCT REVENUE ─── */
+  .product-section {
+    background: var(--black);
+    color: var(--cream);
+  }
+
+  .product-section .section-label { color: var(--sand); }
+  .product-section .section-headline { color: var(--cream); }
+
+  .product-bar-chart {
+    margin-top: 3.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .product-bar-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 80px 60px;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .product-bar-row.revealed { opacity: 1; transform: translateX(0); }
+
+  .product-bar-name {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(249,246,240,0.7);
+    text-align: right;
+  }
+  .product-bar-name.hero-name { color: var(--sand); font-weight: 600; }
+
+  .product-bar-track {
+    background: rgba(255,255,255,0.08);
+    height: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .product-bar-fill {
+    height: 100%;
+    background: rgba(255,255,255,0.2);
+    width: 0;
+    transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .product-bar-fill.gold { background: linear-gradient(90deg, var(--sand-dark), var(--sand)); }
+
+  .product-bar-revenue {
+    font-size: 0.8rem;
+    color: rgba(249,246,240,0.9);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .product-bar-revenue.gold { color: var(--sand); }
+
+  .product-bar-pct {
+    font-size: 0.7rem;
+    color: rgba(249,246,240,0.4);
+    text-align: right;
+  }
+  .product-bar-pct.gold { color: var(--sand); opacity: 0.8; }
+
+  .stat-callouts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    margin-top: 1rem;
+  }
+
+  .stat-callout {
+    background: rgba(255,255,255,0.05);
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .stat-callout-number {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 2.5rem;
+    color: var(--sand);
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-callout-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(249,246,240,0.5);
+  }
+
+  /* ─── BALI DEEP DIVE ─── */
+  .bali-section {
+    background: var(--cream);
+    padding: 0;
+  }
+
+  .bali-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 80vh;
+  }
+
+  .bali-photo {
+    background-image: url('./photos/frnk-photo-2.jpg');
+    background-size: cover;
+    background-position: center top;
+    min-height: 600px;
+  }
+
+  .bali-content {
+    padding: 6rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .bali-stats {
+    display: flex;
+    gap: 2.5rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+  }
+
+  .bali-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .bali-stat-number {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 2rem;
+    color: var(--ink);
+    font-weight: 300;
+  }
+
+  .bali-stat-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+
+  .bali-copy {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--ink-light);
+    font-weight: 300;
+    margin: 1.5rem 0 3rem;
+    max-width: 420px;
+  }
+
+  .paths-headline {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--sand-dark);
+    margin-bottom: 1.5rem;
+  }
+
+  .paths-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .path-card {
+    background: var(--white);
+    padding: 2rem;
+    border-top: 3px solid #e8e2d8;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .path-card.revealed { opacity: 1; transform: translateY(0); }
+  .path-card:nth-child(2) { transition-delay: 0.15s; border-top-color: var(--sand); }
+  .path-card:nth-child(3) { transition-delay: 0.3s; }
+
+  .path-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--sand-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .path-title {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+    font-weight: 300;
+  }
+
+  .path-body {
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: var(--ink-light);
+    font-weight: 300;
+  }
+
+  /* ─── SEASONALITY ─── */
+  .season-section {
+    background: var(--cream);
+  }
+
+  .monthly-chart {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+  }
+
+  .monthly-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 220px;
+  }
+
+  .month-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+    gap: 0.4rem;
+  }
+
+  .month-bar {
+    width: 100%;
+    background: #e0d8cc;
+    transition: height 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    height: 0;
+    position: relative;
+  }
+  .month-bar.peak { background: var(--sand); }
+
+  .month-bar-val {
+    position: absolute;
+    top: -1.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.55rem;
+    color: var(--ink);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .month-name {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+  .month-name.peak { color: var(--sand-dark); font-weight: 600; }
+
+  .peak-label {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sand-dark);
+  }
+
+  .season-takeaway {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e0d8cc;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--ink);
+    font-weight: 300;
+    max-width: 600px;
+  }
+
+  /* ─── PHOTO BREAK ─── */
+  .photo-break {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 80vh;
+    min-height: 500px;
+  }
+
+  .photo-break-img {
+    background-size: cover;
+    background-position: center;
+  }
+
+  /* ─── PLAN ─── */
+  .plan-section {
+    background: var(--white);
+  }
+
+  .phases-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3px;
+    margin-top: 4rem;
+  }
+
+  .phase-card {
+    background: var(--cream);
+    padding: 2.5rem;
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .phase-card.revealed { opacity: 1; transform: translateY(0); }
+  .phase-card:nth-child(2) { transition-delay: 0.1s; }
+  .phase-card:nth-child(3) { transition-delay: 0.2s; }
+  .phase-card:nth-child(4) { transition-delay: 0.3s; }
+
+  .phase-number {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 0.75rem;
+  }
+
+  .phase-month {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.75rem;
+    color: var(--ink);
+    font-weight: 300;
+    margin-bottom: 0.25rem;
+    line-height: 1;
+  }
+
+  .phase-title {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e0d8cc;
+  }
+
+  .phase-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .phase-list li {
+    font-size: 0.85rem;
+    color: var(--ink-light);
+    font-weight: 300;
+    line-height: 1.4;
+    padding-left: 1rem;
+    position: relative;
+  }
+  .phase-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--sand);
+    font-size: 0.7rem;
+  }
+
+  /* ─── CHANNEL STACK ─── */
+  .channel-section {
+    background: var(--cream);
+  }
+
+  .channel-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3px;
+    margin-top: 3rem;
+    margin-bottom: 3px;
+  }
+
+  .accel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+  }
+
+  .channel-card {
+    background: var(--white);
+    padding: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .channel-card.revealed { opacity: 1; transform: translateY(0); }
+
+  .channel-tag {
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--sand-dark);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .channel-name {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--ink);
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+  }
+
+  .channel-role {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 0.75rem;
+  }
+
+  .channel-body {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--ink-light);
+    font-weight: 300;
+  }
+
+  .ai-steps {
+    list-style: none;
+    margin-top: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .ai-steps li {
+    font-size: 0.8rem;
+    color: var(--ink-light);
+    font-weight: 300;
+    padding-left: 1.25rem;
+    position: relative;
+  }
+  .ai-steps li::before {
+    content: counter(step) '.';
+    counter-increment: step;
+    position: absolute;
+    left: 0;
+    color: var(--sand-dark);
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .ai-steps { counter-reset: step; }
+
+  /* ─── INVESTMENT ─── */
+  .invest-section {
+    background: var(--black);
+    color: var(--cream);
+  }
+
+  .invest-section .section-label { color: var(--sand); }
+  .invest-section .section-headline { color: var(--cream); }
+  .invest-section .section-body { color: rgba(249,246,240,0.65); }
+
+  .invest-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    margin-top: 4rem;
+  }
+
+  .invest-card {
+    background: rgba(255,255,255,0.04);
+    padding: 3rem;
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+    border-top: 2px solid rgba(255,255,255,0.1);
+  }
+  .invest-card.revealed { opacity: 1; transform: translateY(0); }
+  .invest-card:nth-child(2) { 
+    transition-delay: 0.15s;
+    border-top-color: var(--sand);
+  }
+
+  .invest-option {
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 1rem;
+  }
+
+  .invest-name {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.75rem;
+    color: var(--cream);
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+  }
+
+  .invest-price {
+    font-size: 1rem;
+    color: var(--sand);
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.05em;
+  }
+
+  .invest-duration {
+    font-size: 0.7rem;
+    color: rgba(249,246,240,0.4);
+    letter-spacing: 0.15em;
+    margin-bottom: 2rem;
+  }
+
+  .invest-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 2rem 0;
+  }
+
+  .invest-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-bottom: 2rem;
+  }
+
+  .invest-list li {
+    font-size: 0.85rem;
+    color: rgba(249,246,240,0.75);
+    font-weight: 300;
+    line-height: 1.4;
+    padding-left: 1.25rem;
+    position: relative;
+  }
+  .invest-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--sand);
+    font-size: 0.7rem;
+  }
+
+  .invest-best-if {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(249,246,240,0.4);
+    margin-bottom: 0.5rem;
+  }
+
+  .invest-best-if-body {
+    font-size: 0.9rem;
+    color: rgba(249,246,240,0.75);
+    font-weight: 300;
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .invest-note {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(201, 182, 144, 0.08);
+    border-left: 2px solid var(--sand);
+    font-size: 0.85rem;
+    color: rgba(249,246,240,0.65);
+    font-weight: 300;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* ─── CLOSING ─── */
+  .closing-section {
+    position: relative;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding: 6rem 3rem;
+  }
+
+  .closing-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('./photos/frnk-photo-1.jpg');
+    background-size: cover;
+    background-position: center 30%;
+  }
+
+  .closing-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(13, 12, 11, 0.85) 40%,
+      rgba(13, 12, 11, 0.2) 100%
+    );
+  }
+
+  .closing-content {
+    position: relative;
+    z-index: 2;
+    max-width: 560px;
+  }
+
+  .closing-headline {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    color: var(--white);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  .closing-subtext {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 2rem;
+  }
+
+  .closing-signoff {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--sand);
+    font-weight: 300;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--black);
+    padding: 2rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-wordmark {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 300;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: rgba(249,246,240,0.3);
+    text-transform: uppercase;
+  }
+
+  .footer-note {
+    font-size: 0.65rem;
+    color: rgba(249,246,240,0.2);
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.revealed { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.35s; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    section { padding: 4rem 1.5rem; }
+    nav { padding: 1.5rem; }
+    .acts-grid { grid-template-columns: 1fr; gap: 3px; }
+    .phases-grid { grid-template-columns: 1fr 1fr; }
+    .channel-grid { grid-template-columns: 1fr 1fr; }
+    .bali-inner { grid-template-columns: 1fr; }
+    .bali-photo { min-height: 400px; background-position: center 20%; }
+    .bali-content { padding: 3rem 2rem; }
+    .paths-grid { grid-template-columns: 1fr; gap: 3px; }
+    .invest-grid { grid-template-columns: 1fr; }
+    .stat-callouts { grid-template-columns: 1fr; }
+    .hero-meta { gap: 1.25rem; }
+    .bar-chart { height: 140px; }
+    .monthly-bars { height: 160px; }
+  }
+
+  @media (max-width: 600px) {
+    .hero-content { padding: 2rem 1.5rem 3.5rem; }
+    .photo-break { grid-template-columns: 1fr; height: auto; }
+    .photo-break-img { height: 60vw; min-height: 280px; }
+    .phases-grid { grid-template-columns: 1fr; }
+    .channel-grid { grid-template-columns: 1fr; }
+    .accel-grid { grid-template-columns: 1fr; }
+    .bali-stats { gap: 1.5rem; }
+    .monthly-bars { gap: 4px; }
+    .month-bar-val { font-size: 0.45rem; }
+    .month-name { font-size: 0.5rem; }
+    .product-bar-row { grid-template-columns: 70px 1fr 60px; }
+    .product-bar-pct { display: none; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── PASSWORD GATE ─── -->
+<div id="gate">
+  <div class="gate-wordmark">FRNK × DigitsUp</div>
+  <h1 class="gate-title">Summer 2026</h1>
+  <p class="gate-subtitle">Confidential · For Stephanie</p>
+  <div class="gate-divider"></div>
+  <div class="gate-input-wrap">
+    <input 
+      type="password" 
+      id="gate-password" 
+      class="gate-input" 
+      placeholder="Enter password"
+      autocomplete="off"
+    >
+    <p class="gate-error" id="gate-error">Incorrect password</p>
+    <button class="gate-btn" onclick="checkPassword()">Enter</button>
+  </div>
+</div>
+
+<!-- ─── MAIN CONTENT ─── -->
+<div id="main">
+
+  <!-- ─── HERO ─── -->
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <nav>
+      <div class="nav-wordmark">FRNK × DigitsUp</div>
+      <div class="nav-meta">Summer 2026</div>
+    </nav>
+    <div class="hero-content">
+      <h1 class="hero-headline">"In 2022 you proved the model. Let's run it back."</h1>
+      <p class="hero-subhead">A focused summer plan to relaunch FRNK — built around what already worked.</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">For</span>
+          <span class="hero-meta-value">Stephanie</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">From</span>
+          <span class="hero-meta-value">Michael</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Window</span>
+          <span class="hero-meta-value">May → Labor Day</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── THE STORY ─── -->
+  <section class="story-section">
+    <div class="max-wrap">
+      <p class="section-label reveal">The Story</p>
+      <h2 class="section-headline reveal reveal-delay-1">Three years. Three chapters.<br>One clear path forward.</h2>
+
+      <div class="acts-grid">
+        <div class="act-card">
+          <div class="act-number">i.</div>
+          <div class="act-year">2022</div>
+          <div class="act-title">You proved it works</div>
+          <div class="act-body">The summer that proved everything. A small brand, a strong product, and an audience ready to buy.</div>
+          <div class="act-stat">$21,458 revenue · 296 orders<br>BALI alone: $10,273</div>
+        </div>
+        <div class="act-card">
+          <div class="act-number">ii.</div>
+          <div class="act-year">2024</div>
+          <div class="act-title">You proved the audience</div>
+          <div class="act-body">32,020 women came to the site. Ads brought them. The audience is real. BALI was sold out — and they couldn't buy it.</div>
+          <div class="act-stat">32,020 sessions · BALI sold out<br>Audience proven</div>
+        </div>
+        <div class="act-card">
+          <div class="act-number">iii.</div>
+          <div class="act-year">2026</div>
+          <div class="act-title">Put them back together</div>
+          <div class="act-body">The hero is named. The audience exists. The only thing missing is the system underneath — and that's what this is.</div>
+          <div class="act-stat" style="color: var(--sand-dark);">The model + the audience<br>= Summer 2026</div>
+        </div>
+      </div>
+
+      <!-- Sessions Bar Chart -->
+      <div class="chart-wrap reveal">
+        <div class="chart-title">Site sessions by year</div>
+        <div class="bar-chart" id="sessionsChart">
+          <div class="bar-group">
+            <div class="bar-label-top">Proof Year</div>
+            <div class="bar" data-height="32" id="bar2022">
+              <span class="bar-value">10,257</span>
+            </div>
+            <div class="bar-year">2022</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-label-top"></div>
+            <div class="bar" data-height="67" id="bar2023">
+              <span class="bar-value">21,539</span>
+            </div>
+            <div class="bar-year">2023</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-label-top">Ads Year ↑</div>
+            <div class="bar gold" data-height="100" id="bar2024">
+              <span class="bar-value">32,020</span>
+            </div>
+            <div class="bar-year">2024</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-label-top">Pause Year</div>
+            <div class="bar faded" data-height="22" id="bar2025">
+              <span class="bar-value">7,117</span>
+            </div>
+            <div class="bar-year">2025</div>
+          </div>
+        </div>
+        <div class="chart-takeaway">
+          "2024 brought 32,000 women to the site. BALI was sold out. We don't repeat that mistake."
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PRODUCT REVENUE ─── -->
+  <section class="product-section">
+    <div class="max-wrap">
+      <p class="section-label reveal">What's Working</p>
+      <h2 class="section-headline reveal reveal-delay-1">Your top ten styles.<br>Ranked by reality.</h2>
+
+      <div class="product-bar-chart">
+        <div class="product-bar-row" data-width="100" id="pbali">
+          <div class="product-bar-name hero-name">BALI</div>
+          <div class="product-bar-track"><div class="product-bar-fill gold" data-width="100"></div></div>
+          <div class="product-bar-revenue gold">$18,202</div>
+          <div class="product-bar-pct gold">35%</div>
+        </div>
+        <div class="product-bar-row" data-width="43">
+          <div class="product-bar-name">PORTOFINO</div>
+          <div class="product-bar-track"><div class="product-bar-fill" data-width="43"></div></div>
+          <div class="product-bar-revenue">$7,740</div>
+          <div class="product-bar-pct">15%</div>
+        </div>
+        <div class="product-bar-row" data-width="23">
+          <div class="product-bar-name">MYKONOS</div>
+          <div class="product-bar-track"><div class="product-bar-fill" data-width="23"></div></div>
+          <div class="product-bar-revenue">$4,116</div>
+          <div class="product-bar-pct">8%</div>
+        </div>
+        <div class="product-bar-row" data-width="15">
+          <div class="product-bar-name">ST. TROPEZ</div>
+          <div class="product-bar-track"><div class="product-bar-fill" data-width="15"></div></div>
+          <div class="product-bar-revenue">$2,749</div>
+          <div class="product-bar-pct">5%</div>
+        </div>
+        <div class="product-bar-row" data-width="12">
+          <div class="product-bar-name">FIJI</div>
+          <div class="product-bar-track"><div class="product-bar-fill" data-width="12"></div></div>
+          <div class="product-bar-revenue">$2,101</div>
+          <div class="product-bar-pct">4%</div>
+        </div>
+        <div class="product-bar-row" data-width="11">
+          <div class="product-bar-name">TAHITI</div>
+          <div class="product-bar-track"><div class="product-bar-fill" data-width="11"></div></div>
+          <div class="product-bar-revenue">$2,073</div>
+          <div class="product-bar-pct">4%</div>
+        </div>
+        <div class="product-bar-row" data-width="10">
+          <div class="product-bar-name">CARTAGENA</div>
+          <div class="product-bar-track"><div class="product-bar-fill" data-width="10"></div></div>
+          <div class="product-bar-revenue">$1,733</div>
+          <div class="product-bar-pct">3%</div>
+        </div>
+        <div class="product-bar-row" data-width="8">
+          <div class="product-bar-name">BELIZE</div>
+          <div class="product-bar-track"><div class="product-bar-fill" data-width="8"></div></div>
+          <div class="product-bar-revenue">$1,377</div>
+          <div class="product-bar-pct">3%</div>
+        </div>
+        <div class="product-bar-row" data-width="7">
+          <div class="product-bar-name">MALLORCA</div>
+          <div class="product-bar-track"><div class="product-bar-fill" data-width="7"></div></div>
+          <div class="product-bar-revenue">$1,334</div>
+          <div class="product-bar-pct">3%</div>
+        </div>
+        <div class="product-bar-row" data-width="6">
+          <div class="product-bar-name">CAPRI</div>
+          <div class="product-bar-track"><div class="product-bar-fill" data-width="6"></div></div>
+          <div class="product-bar-revenue">$1,099</div>
+          <div class="product-bar-pct">2%</div>
+        </div>
+      </div>
+
+      <div class="stat-callouts">
+        <div class="stat-callout reveal">
+          <div class="stat-callout-number">35%</div>
+          <div class="stat-callout-label">From one bikini</div>
+        </div>
+        <div class="stat-callout reveal reveal-delay-1">
+          <div class="stat-callout-number">58%</div>
+          <div class="stat-callout-label">From top three styles</div>
+        </div>
+        <div class="stat-callout reveal reveal-delay-2">
+          <div class="stat-callout-number">82%</div>
+          <div class="stat-callout-label">From top ten styles</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── BALI DEEP DIVE ─── -->
+  <section class="bali-section">
+    <div class="bali-inner">
+      <div class="bali-photo"></div>
+      <div class="bali-content">
+        <p class="section-label">BALI Deep Dive</p>
+        <h2 class="section-headline">One bikini did almost half the work.</h2>
+        <div class="bali-stats">
+          <div class="bali-stat">
+            <span class="bali-stat-number">270</span>
+            <span class="bali-stat-label">Units sold</span>
+          </div>
+          <div class="bali-stat">
+            <span class="bali-stat-number">2×</span>
+            <span class="bali-stat-label">vs. #2 style</span>
+          </div>
+          <div class="bali-stat">
+            <span class="bali-stat-number">2 yrs</span>
+            <span class="bali-stat-label">Out of stock</span>
+          </div>
+        </div>
+        <p class="bali-copy">BALI carried this brand. Then in 2024 it ran out. Two years of zero BALI sales followed. The audience kept coming. There was just nothing for them to buy.</p>
+        
+        <p class="paths-headline">The Decision — 3 Paths for BALI in 2026</p>
+      </div>
+    </div>
+    <div class="paths-grid" style="padding: 3px;">
+      <div class="path-card">
+        <div class="path-label">Path A · Best case</div>
+        <div class="path-title">Restock fully.</div>
+        <div class="path-body">Lead with BALI. Largest revenue upside. Build a VIP early-access list. Let the hero do what the hero does.</div>
+      </div>
+      <div class="path-card">
+        <div class="path-label">Path B · Hybrid</div>
+        <div class="path-title">Limited restock.</div>
+        <div class="path-body">Limited restock. Test a sibling colorway. Lower upfront cost, tests demand before going all-in. De-risked.</div>
+      </div>
+      <div class="path-card">
+        <div class="path-label">Path C · Pivot</div>
+        <div class="path-title">No restock.</div>
+        <div class="path-body">Make PORTOFINO the summer hero. Zero inventory risk. Grow BALI waitlist all summer. Set up the fall comeback.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SEASONALITY ─── -->
+  <section class="season-section">
+    <div class="max-wrap">
+      <p class="section-label reveal">The Window</p>
+      <h2 class="section-headline reveal reveal-delay-1">The data already<br>named the season.</h2>
+
+      <div class="monthly-chart reveal">
+        <div class="monthly-bars" id="monthlyChart">
+          <div class="month-group"><div class="month-bar" data-height="41"><span class="month-bar-val">$710</span></div><div class="month-name">Jan</div></div>
+          <div class="month-group"><div class="month-bar" data-height="22"><span class="month-bar-val">$378</span></div><div class="month-name">Feb</div></div>
+          <div class="month-group"><div class="month-bar" data-height="49"><span class="month-bar-val">$858</span></div><div class="month-name">Mar</div></div>
+          <div class="month-group"><div class="month-bar peak" data-height="100"><span class="month-bar-val">$1,749</span></div><div class="month-name peak">Apr</div></div>
+          <div class="month-group"><div class="month-bar peak" data-height="95"><span class="month-bar-val">$1,668</span></div><div class="month-name peak">May</div></div>
+          <div class="month-group"><div class="month-bar peak" data-height="92"><span class="month-bar-val">$1,608</span></div><div class="month-name peak">Jun</div></div>
+          <div class="month-group"><div class="month-bar peak" data-height="78"><span class="month-bar-val">$1,371</span></div><div class="month-name peak">Jul</div></div>
+          <div class="month-group"><div class="month-bar" data-height="33"><span class="month-bar-val">$581</span></div><div class="month-name">Aug</div></div>
+          <div class="month-group"><div class="month-bar" data-height="34"><span class="month-bar-val">$593</span></div><div class="month-name">Sep</div></div>
+          <div class="month-group"><div class="month-bar" data-height="33"><span class="month-bar-val">$569</span></div><div class="month-name">Oct</div></div>
+          <div class="month-group"><div class="month-bar" data-height="33"><span class="month-bar-val">$584</span></div><div class="month-name">Nov</div></div>
+          <div class="month-group"><div class="month-bar" data-height="27"><span class="month-bar-val">$464</span></div><div class="month-name">Dec</div></div>
+        </div>
+        <div class="peak-label">▲ April – July · Peak season</div>
+      </div>
+
+      <p class="season-takeaway reveal">
+        "April through July does almost two-thirds of yearly revenue. We launch by June 1 because the data already proved when summer starts."
+      </p>
+    </div>
+  </section>
+
+  <!-- ─── PHOTO BREAK ─── -->
+  <div class="photo-break">
+    <div class="photo-break-img" style="background-image: url('./photos/frnk-photo-3.jpg'); background-position: center 30%;"></div>
+    <div class="photo-break-img" style="background-image: url('./photos/frnk-photo-4.jpg'); background-position: center 20%;"></div>
+  </div>
+
+  <!-- ─── THE PLAN ─── -->
+  <section class="plan-section">
+    <div class="max-wrap">
+      <p class="section-label reveal">The Plan</p>
+      <h2 class="section-headline reveal reveal-delay-1">Four phases.<br>One summer.</h2>
+
+      <div class="phases-grid">
+        <div class="phase-card">
+          <div class="phase-number">Phase 01</div>
+          <div class="phase-month">May</div>
+          <div class="phase-title">Foundation</div>
+          <ul class="phase-list">
+            <li>Decide BALI path</li>
+            <li>Begin Shopify rebuild</li>
+            <li>Audit Klaviyo</li>
+            <li>Plan first June campaign</li>
+          </ul>
+        </div>
+        <div class="phase-card">
+          <div class="phase-number">Phase 02</div>
+          <div class="phase-month">June</div>
+          <div class="phase-title">Launch</div>
+          <ul class="phase-list">
+            <li>New Shopify live</li>
+            <li>Welcome + cart flows on</li>
+            <li>Summer relaunch campaign</li>
+            <li>Instagram + TikTok rhythm</li>
+          </ul>
+        </div>
+        <div class="phase-card">
+          <div class="phase-number">Phase 03</div>
+          <div class="phase-month">Jul–Aug</div>
+          <div class="phase-title">Amplify</div>
+          <ul class="phase-list">
+            <li>Creator gifting starts</li>
+            <li>Pinterest live</li>
+            <li>Weekly campaign cadence</li>
+            <li>Sibling product test</li>
+          </ul>
+        </div>
+        <div class="phase-card">
+          <div class="phase-number">Phase 04</div>
+          <div class="phase-month">September</div>
+          <div class="phase-title">Plan Year Two</div>
+          <ul class="phase-list">
+            <li>Full summer review</li>
+            <li>Ads readiness check</li>
+            <li>Fall + holiday plan</li>
+            <li>BALI 2027 lineup</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CHANNEL STACK ─── -->
+  <section class="channel-section">
+    <div class="max-wrap">
+      <p class="section-label reveal">Channel Stack</p>
+      <h2 class="section-headline reveal reveal-delay-1">Where to show up.</h2>
+
+      <div class="channel-grid">
+        <div class="channel-card">
+          <span class="channel-tag">Always On</span>
+          <div class="channel-name">Email & SMS</div>
+          <div class="channel-role">Conversion engine</div>
+          <div class="channel-body">The highest-ROI channel in e-commerce. Klaviyo-native. Every dollar spent on email works harder than any ad.</div>
+        </div>
+        <div class="channel-card">
+          <span class="channel-tag">Always On</span>
+          <div class="channel-name">Instagram</div>
+          <div class="channel-role">Brand home</div>
+          <div class="channel-body">Where the brand lives and breathes. Editorial content, product drops, community. The visual identity anchor.</div>
+        </div>
+        <div class="channel-card">
+          <span class="channel-tag">Always On</span>
+          <div class="channel-name">TikTok</div>
+          <div class="channel-role">Discovery engine</div>
+          <div class="channel-body">New audience acquisition at zero ad spend. Authentic content drives discovery better than any paid placement.</div>
+        </div>
+        <div class="channel-card">
+          <span class="channel-tag">Always On</span>
+          <div class="channel-name">Pinterest</div>
+          <div class="channel-role">Quiet winner</div>
+          <div class="channel-body">Swimwear's secret weapon. High intent. Long shelf life. Content lives for years, not hours. Underutilized.</div>
+        </div>
+      </div>
+
+      <div class="accel-grid" style="margin-top: 3px;">
+        <div class="channel-card">
+          <span class="channel-tag">Acceleration</span>
+          <div class="channel-name">Paid Ads</div>
+          <div class="channel-role">Meta first — when BALI is back</div>
+          <div class="channel-body">Not yet. Ads amplify what already works. When BALI is restocked and the system is solid, this becomes the growth lever. Not before.</div>
+        </div>
+        <div class="channel-card">
+          <span class="channel-tag">Acceleration · Early Lane</span>
+          <div class="channel-name">AI Search</div>
+          <div class="channel-role">Citation-ready before competitors</div>
+          <div class="channel-body">The next search revolution is already here. FRNK can own this lane before the big brands figure it out.</div>
+          <ul class="ai-steps">
+            <li>Audit AI visibility</li>
+            <li>Schema markup overhaul</li>
+            <li>5 citation-ready pages</li>
+            <li>Authentic seeding</li>
+            <li>Quarterly tracking</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── INVESTMENT ─── -->
+  <section class="invest-section">
+    <div class="max-wrap">
+      <p class="section-label reveal">Investment</p>
+      <h2 class="section-headline reveal reveal-delay-1">Family pricing.</h2>
+      <p class="section-body reveal reveal-delay-2">Built around what FRNK actually needs right now — not what we could sell you.</p>
+
+      <div class="invest-grid">
+        <div class="invest-card">
+          <div class="invest-option">Option A</div>
+          <div class="invest-name">Email First</div>
+          <div class="invest-price">$1,200 / month</div>
+          <div class="invest-duration">4 months</div>
+          <div class="invest-divider"></div>
+          <ul class="invest-list">
+            <li>Klaviyo audit + full setup</li>
+            <li>5 automated flows (welcome, cart, browse, post-purchase, win-back)</li>
+            <li>6–8 monthly campaigns</li>
+            <li>Monthly reporting</li>
+            <li>Direct line to Michael</li>
+          </ul>
+          <div class="invest-best-if">Best if</div>
+          <div class="invest-best-if-body">Inventory situation still being worked out. Start earning from existing list immediately.</div>
+        </div>
+        <div class="invest-card">
+          <div class="invest-option">Option B</div>
+          <div class="invest-name">Full Relaunch</div>
+          <div class="invest-price">$3,000 one-time + $1,200 / month</div>
+          <div class="invest-duration">4 months</div>
+          <div class="invest-divider"></div>
+          <ul class="invest-list">
+            <li>Everything in Option A, plus:</li>
+            <li>New Shopify site (editorial redesign, mobile-first, USD + CAD)</li>
+            <li>Launch campaign strategy</li>
+            <li>AI search foundation</li>
+          </ul>
+          <div class="invest-best-if">Best if</div>
+          <div class="invest-best-if-body">BALI restock is confirmed and you're ready to go all-in on summer.</div>
+        </div>
+      </div>
+
+      <div class="invest-note">
+        "Pricing is family — roughly half what we'd charge a new client for this scope. The work is the same quality."
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CLOSING ─── -->
+  <section class="closing-section">
+    <div class="closing-bg"></div>
+    <div class="closing-overlay"></div>
+    <div class="closing-content">
+      <h2 class="closing-headline">"You did the hard part. Let's run it back, together."</h2>
+      <p class="closing-subtext">A short call this week to choose the BALI path, then we go.</p>
+      <div class="closing-signoff">— Michael</div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer>
+    <div class="footer-wordmark">FRNK × DigitsUp · Summer 2026</div>
+    <div class="footer-note">Confidential · For Stephanie Frank</div>
+  </footer>
+
+</div><!-- end #main -->
+
+<script>
+  // ─── PASSWORD GATE ───
+  (function() {
+    if (sessionStorage.getItem('frnk_auth') === '1') {
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('main').classList.add('visible');
+      setTimeout(() => {
+        document.getElementById('heroBg').classList.add('loaded');
+      }, 100);
+    }
+    
+    document.getElementById('gate-password').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') checkPassword();
+    });
+  })();
+
+  function checkPassword() {
+    const val = document.getElementById('gate-password').value;
+    const err = document.getElementById('gate-error');
+    if (val === 'FRNK') {
+      sessionStorage.setItem('frnk_auth', '1');
+      const gate = document.getElementById('gate');
+      const main = document.getElementById('main');
+      gate.classList.add('hidden');
+      main.classList.add('visible');
+      setTimeout(() => {
+        gate.style.display = 'none';
+        document.getElementById('heroBg').classList.add('loaded');
+      }, 800);
+    } else {
+      err.classList.add('show');
+      document.getElementById('gate-password').value = '';
+      setTimeout(() => err.classList.remove('show'), 2500);
+    }
+  }
+
+  // ─── INTERSECTION OBSERVER ───
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal, .act-card, .phase-card, .channel-card, .invest-card, .path-card').forEach(el => {
+    observer.observe(el);
+  });
+
+  // ─── SESSION BAR CHART ───
+  const sessionsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateSessionBars();
+        sessionsObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const sessionsChart = document.getElementById('sessionsChart');
+  if (sessionsChart) sessionsObserver.observe(sessionsChart);
+
+  function animateSessionBars() {
+    const maxSessions = 32020;
+    const chartHeight = 160; // px
+    const bars = [
+      { id: 'bar2022', val: 10257 },
+      { id: 'bar2023', val: 21539 },
+      { id: 'bar2024', val: 32020 },
+      { id: 'bar2025', val: 7117 },
+    ];
+    bars.forEach((b, i) => {
+      setTimeout(() => {
+        const el = document.getElementById(b.id);
+        if (el) el.style.height = (b.val / maxSessions * chartHeight) + 'px';
+      }, i * 100);
+    });
+  }
+
+  // ─── MONTHLY CHART ───
+  const monthlyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateMonthlyBars();
+        monthlyObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const monthlyChart = document.getElementById('monthlyChart');
+  if (monthlyChart) monthlyObserver.observe(monthlyChart);
+
+  function animateMonthlyBars() {
+    const bars = monthlyChart.querySelectorAll('.month-bar');
+    const chartHeight = 180;
+    bars.forEach((bar, i) => {
+      const pct = parseInt(bar.dataset.height) / 100;
+      setTimeout(() => {
+        bar.style.height = (pct * chartHeight) + 'px';
+      }, i * 60);
+    });
+  }
+
+  // ─── PRODUCT BARS ───
+  const productObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateProductBars();
+        productObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  const firstProductRow = document.getElementById('pbali');
+  if (firstProductRow) productObserver.observe(firstProductRow);
+
+  function animateProductBars() {
+    const rows = document.querySelectorAll('.product-bar-row');
+    rows.forEach((row, i) => {
+      setTimeout(() => {
+        row.classList.add('revealed');
+        const fill = row.querySelector('.product-bar-fill');
+        if (fill) {
+          const w = fill.dataset.width;
+          fill.style.width = w + '%';
+        }
+      }, i * 80);
+    });
+  }
+</script>
+
+</body>
+</html>
