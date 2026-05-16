@@ -378,13 +378,14 @@
     height: 200px;
   }
 
+  /* CHANGE A: justify-content: space-between fixes label/value overlap */
   .bar-group {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100%;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 0.5rem;
   }
 
@@ -545,8 +546,9 @@
     min-height: 80vh;
   }
 
+  /* CHANGE B: swapped to bali-hero.webp */
   .bali-photo {
-    background-image: url('./photos/frnk-photo-2.jpg');
+    background-image: url('./photos/bali-hero.webp');
     background-size: cover;
     background-position: center top;
     min-height: 600px;
@@ -725,9 +727,10 @@
   }
 
   /* ─── PHOTO BREAK ─── */
+  /* CHANGE B (purple bikini): expanded to 3 columns to accommodate frnk-photo-2.jpg */
   .photo-break {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     height: 80vh;
     min-height: 500px;
   }
@@ -812,22 +815,57 @@
     font-size: 0.7rem;
   }
 
+  /* CHANGE H: Win a BALI quick-win callout */
+  .quick-win-callout {
+    margin-top: 1.75rem;
+    padding: 1.25rem;
+    background: rgba(201, 182, 144, 0.12);
+    border: 1px solid rgba(201, 182, 144, 0.5);
+    border-left: 3px solid var(--sand);
+  }
+
+  .quick-win-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--sand-dark);
+    margin-bottom: 0.4rem;
+  }
+
+  .quick-win-title {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--ink);
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+  }
+
+  .quick-win-body {
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: var(--ink-light);
+    font-weight: 300;
+  }
+
   /* ─── CHANNEL STACK ─── */
   .channel-section {
     background: var(--cream);
   }
 
+  /* CHANGE E: 5 cards now — updated from repeat(4,1fr) */
   .channel-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 3px;
     margin-top: 3rem;
     margin-bottom: 3px;
   }
 
+  /* CHANGE D: accel-grid now 1 card only */
   .accel-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 3px;
   }
 
@@ -898,6 +936,53 @@
     font-weight: 600;
   }
   .ai-steps { counter-reset: step; }
+
+  /* ─── THE LIST (Klaviyo data section) ─── */
+  .list-section {
+    background: var(--cream);
+    border-top: 1px solid #e8e2d8;
+  }
+
+  .list-stats {
+    display: flex;
+    gap: 4rem;
+    margin: 2.5rem 0 2rem;
+    flex-wrap: wrap;
+  }
+
+  .list-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .list-stat-number {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 2.75rem;
+    color: var(--ink);
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  .list-stat-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+
+  .list-takeaway {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--ink-light);
+    font-weight: 300;
+    max-width: 560px;
+    font-style: italic;
+    margin-top: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e8e2d8;
+  }
 
   /* ─── INVESTMENT ─── */
   .invest-section {
@@ -1132,6 +1217,8 @@
     .hero-meta { gap: 1.25rem; }
     .bar-chart { height: 140px; }
     .monthly-bars { height: 160px; }
+    .list-stats { gap: 2rem; }
+    .photo-break { grid-template-columns: 1fr 1fr; }
   }
 
   @media (max-width: 600px) {
@@ -1148,6 +1235,7 @@
     .product-bar-row { grid-template-columns: 70px 1fr 60px; }
     .product-bar-pct { display: none; }
     footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    .list-stats { gap: 1.5rem; }
   }
 </style>
 </head>
@@ -1360,6 +1448,7 @@
   </section>
 
   <!-- ─── BALI DEEP DIVE ─── -->
+  <!-- CHANGE B: .bali-photo now uses bali-hero.webp (see CSS) -->
   <section class="bali-section">
     <div class="bali-inner">
       <div class="bali-photo"></div>
@@ -1435,8 +1524,10 @@
   </section>
 
   <!-- ─── PHOTO BREAK ─── -->
+  <!-- CHANGE B: frnk-photo-2.jpg (purple bikini) placed in the center slot -->
   <div class="photo-break">
     <div class="photo-break-img" style="background-image: url('./photos/frnk-photo-3.jpg'); background-position: center 30%;"></div>
+    <div class="photo-break-img" style="background-image: url('./photos/frnk-photo-2.jpg'); background-position: center 20%;"></div>
     <div class="photo-break-img" style="background-image: url('./photos/frnk-photo-4.jpg'); background-position: center 20%;"></div>
   </div>
 
@@ -1447,6 +1538,7 @@
       <h2 class="section-headline reveal reveal-delay-1">Four phases.<br>One summer.</h2>
 
       <div class="phases-grid">
+        <!-- CHANGE H: Win a BALI callout added inside Phase 01 -->
         <div class="phase-card">
           <div class="phase-number">Phase 01</div>
           <div class="phase-month">May</div>
@@ -1457,6 +1549,11 @@
             <li>Audit Klaviyo</li>
             <li>Plan first June campaign</li>
           </ul>
+          <div class="quick-win-callout">
+            <div class="quick-win-label">Quick Win</div>
+            <div class="quick-win-title">Win a BALI</div>
+            <div class="quick-win-body">Before ads. Before full flows. A boosted giveaway to build the list fast right at the start of peak season. BALI is the prize — limited, iconic, already proven. Boost on Meta for a few hundred dollars. Every entry is a warm lead heading into summer.</div>
+          </div>
         </div>
         <div class="phase-card">
           <div class="phase-number">Phase 02</div>
@@ -1501,6 +1598,7 @@
       <p class="section-label reveal">Channel Stack</p>
       <h2 class="section-headline reveal reveal-delay-1">Where to show up.</h2>
 
+      <!-- CHANGE E & F: SMS card added; Pinterest copy updated with search data -->
       <div class="channel-grid">
         <div class="channel-card">
           <span class="channel-tag">Always On</span>
@@ -1520,14 +1618,23 @@
           <div class="channel-role">Discovery engine</div>
           <div class="channel-body">New audience acquisition at zero ad spend. Authentic content drives discovery better than any paid placement.</div>
         </div>
+        <!-- CHANGE F: Updated Pinterest body copy with search data -->
         <div class="channel-card">
           <span class="channel-tag">Always On</span>
           <div class="channel-name">Pinterest</div>
           <div class="channel-role">Quiet winner</div>
-          <div class="channel-body">Swimwear's secret weapon. High intent. Long shelf life. Content lives for years, not hours. Underutilized.</div>
+          <div class="channel-body">Swimwear's secret weapon. FRNK already appears in Pinterest searches for "luxury handmade bikini" and "luxury swimwear for special occasions" — organically, with zero effort. High intent. Long shelf life. Content lives for years, not hours. We just need to give it more to work with.</div>
+        </div>
+        <!-- CHANGE E: New standalone SMS card -->
+        <div class="channel-card">
+          <span class="channel-tag">Always On</span>
+          <div class="channel-name">SMS</div>
+          <div class="channel-role">Instant scarcity driver</div>
+          <div class="channel-body">For a brand doing limited drops, SMS is the fastest way to move product. "BALI just restocked" as a text converts faster than any email. Easy to set up, high return.</div>
         </div>
       </div>
 
+      <!-- CHANGE D: AI Search card removed; Paid Ads card remains; grid is now 1 column -->
       <div class="accel-grid" style="margin-top: 3px;">
         <div class="channel-card">
           <span class="channel-tag">Acceleration</span>
@@ -1535,20 +1642,34 @@
           <div class="channel-role">Meta first — when BALI is back</div>
           <div class="channel-body">Not yet. Ads amplify what already works. When BALI is restocked and the system is solid, this becomes the growth lever. Not before.</div>
         </div>
-        <div class="channel-card">
-          <span class="channel-tag">Acceleration · Early Lane</span>
-          <div class="channel-name">AI Search</div>
-          <div class="channel-role">Citation-ready before competitors</div>
-          <div class="channel-body">The next search revolution is already here. FRNK can own this lane before the big brands figure it out.</div>
-          <ul class="ai-steps">
-            <li>Audit AI visibility</li>
-            <li>Schema markup overhaul</li>
-            <li>5 citation-ready pages</li>
-            <li>Authentic seeding</li>
-            <li>Quarterly tracking</li>
-          </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── THE LIST (Klaviyo data) — CHANGE G ─── -->
+  <section class="list-section">
+    <div class="max-wrap">
+      <p class="section-label reveal">The List</p>
+      <h2 class="section-headline reveal reveal-delay-1">462 women already know FRNK.<br>They just haven't bought yet.</h2>
+
+      <div class="list-stats reveal reveal-delay-2">
+        <div class="list-stat">
+          <span class="list-stat-number">1,048</span>
+          <span class="list-stat-label">Total contacts</span>
+        </div>
+        <div class="list-stat">
+          <span class="list-stat-number">586</span>
+          <span class="list-stat-label">Have purchased (56%)</span>
+        </div>
+        <div class="list-stat">
+          <span class="list-stat-number">462</span>
+          <span class="list-stat-label">Never purchased</span>
         </div>
       </div>
+
+      <p class="list-takeaway reveal reveal-delay-3">
+        "Email turns that gap into revenue before a single ad runs. The list exists. The system is what's missing."
+      </p>
     </div>
   </section>
 
@@ -1558,6 +1679,10 @@
       <p class="section-label reveal">Investment</p>
       <h2 class="section-headline reveal reveal-delay-1">Family pricing.</h2>
       <p class="section-body reveal reveal-delay-2">Built around what FRNK actually needs right now — not what we could sell you.</p>
+      <!-- CHANGE I: ROI framing line -->
+      <p class="section-body reveal reveal-delay-3" style="margin-top: 1rem;">
+        Email typically drives 20–30% of revenue for brands at this stage. For FRNK, that channel doesn't exist yet — which means this is the highest-ROI move on the board.
+      </p>
 
       <div class="invest-grid">
         <div class="invest-card">
@@ -1582,19 +1707,20 @@
           <div class="invest-price">$3,000 one-time + $1,200 / month</div>
           <div class="invest-duration">4 months</div>
           <div class="invest-divider"></div>
+          <!-- CHANGE D: "AI search foundation" removed from Option B list -->
           <ul class="invest-list">
             <li>Everything in Option A, plus:</li>
             <li>New Shopify site (editorial redesign, mobile-first, USD + CAD)</li>
             <li>Launch campaign strategy</li>
-            <li>AI search foundation</li>
           </ul>
           <div class="invest-best-if">Best if</div>
           <div class="invest-best-if-body">BALI restock is confirmed and you're ready to go all-in on summer.</div>
         </div>
       </div>
 
+      <!-- CHANGE C: Family pricing quote replaced -->
       <div class="invest-note">
-        "Pricing is family — roughly half what we'd charge a new client for this scope. The work is the same quality."
+        "Built around what FRNK actually needs right now — not a template, not an upsell. Just the right moves for this moment."
       </div>
     </div>
   </section>
