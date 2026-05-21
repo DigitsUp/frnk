@@ -1249,6 +1249,37 @@
     footer { flex-direction: column; gap: 0.5rem; text-align: center; }
     .list-stats { gap: 1.5rem; }
   }
+
+/* ─── STICKY ANCHOR NAV ─── */
+.anchor-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--cream);
+  border-bottom: 1px solid #e8e2d8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  padding: 0.85rem 2rem;
+}
+
+.anchor-nav a {
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--warm-gray);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.anchor-nav a:hover { color: var(--ink); }
+.anchor-nav a.active { color: var(--ink); border-bottom: 1px solid var(--sand); padding-bottom: 2px; }
+
+@media (max-width: 600px) {
+  .anchor-nav { gap: 1.5rem; padding: 0.75rem 1rem; }
+}
 </style>
 </head>
 <body>
@@ -1275,8 +1306,14 @@
 <!-- ─── MAIN CONTENT ─── -->
 <div id="main">
 
+<!-- ─── STICKY ANCHOR NAV ─── -->
+<div class="anchor-nav">
+  <a href="#hero-top">Proposal</a>
+  <a href="#flow-strategy">Flow Strategy</a>
+</div>
+
   <!-- ─── HERO ─── -->
-  <section class="hero">
+  <section class="hero" id="hero-top">
     <div class="hero-bg" id="heroBg"></div>
     <div class="hero-overlay"></div>
     <nav>
@@ -1807,6 +1844,320 @@
       <div class="closing-signoff">— Michael</div>
     </div>
   </section>
+
+<!-- ─── FLOW STRATEGY ─── -->
+<section class="flow-strategy-section" id="flow-strategy" style="background: var(--white);">
+  <div class="max-wrap">
+    <p class="section-label reveal">The System</p>
+    <h2 class="section-headline reveal reveal-delay-1">Every flow. What it does.<br>Why it matters for FRNK.</h2>
+    <p class="section-body reveal reveal-delay-2">Email doesn&#8217;t just send newsletters. It runs quietly in the background &#8212; catching people at the right moment, saying the right thing, turning interest into a sale. Here&#8217;s exactly what we&#8217;re building and how each piece works.</p>
+  </div>
+</section>
+
+<!-- ─── SIGNUP FORM ─── -->
+<section style="background: var(--cream); padding: 5rem 3rem;">
+  <div class="max-wrap">
+    <p class="section-label reveal">Before Any Flow</p>
+    <h2 class="section-headline reveal reveal-delay-1">The signup form.<br>How women find their way in.</h2>
+    <p class="section-body reveal reveal-delay-2">Every flow starts with a subscriber. The signup form is how we grow the list &#8212; and the offer we make determines who shows up and how excited they are.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-top: 3rem;" class="reveal reveal-delay-3">
+      <div style="background: var(--white); padding: 2.5rem; border-top: 3px solid var(--sand);">
+        <div class="phase-number">Option A &middot; Recommended</div>
+        <div class="phase-month" style="font-size: 1.4rem;">Win a BALI</div>
+        <div class="phase-title">Giveaway-driven signup</div>
+        <ul class="phase-list">
+          <li>Enter to win the full BALI set</li>
+          <li>Highest signup rate &#8212; low friction, high aspiration</li>
+          <li>Every entry is a warm lead heading into summer</li>
+          <li>Boost on Meta for $200&#8211;300 to seed the list fast</li>
+          <li>BALI is iconic, limited, and proven &#8212; perfect prize</li>
+        </ul>
+      </div>
+      <div style="background: var(--white); padding: 2.5rem; border-top: 3px solid #e8e2d8;">
+        <div class="phase-number">Option B</div>
+        <div class="phase-month" style="font-size: 1.4rem;">$50 off your first order</div>
+        <div class="phase-title">Discount-driven signup</div>
+        <ul class="phase-list">
+          <li>Stackable with sale events (MDW, 4th of July)</li>
+          <li>More transactional &#8212; attracts deal-seekers</li>
+          <li>Works well as a fallback for giveaway non-winners</li>
+          <li>Easier to run long-term as an evergreen offer</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-win-callout reveal" style="margin-top: 2rem; max-width: 600px;">
+      <div class="quick-win-label">Our Take</div>
+      <div class="quick-win-body">Start with the giveaway. It fits the brand &#8212; premium, limited, desirable. If Steph wants a discount layer, we can add it as the &#8220;consolation&#8221; offer for non-winners. Best of both.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── WELCOME SERIES ─── -->
+<section style="background: var(--white); padding: 5rem 3rem;">
+  <div class="max-wrap">
+    <p class="section-label reveal">Flow 01</p>
+    <h2 class="section-headline reveal reveal-delay-1">Welcome Series.<br>You found something rare. Here&#8217;s why it matters.</h2>
+    <p class="section-body reveal reveal-delay-2">The moment someone joins the list, they&#8217;re curious. They might have just entered a giveaway or discovered the brand. This is the sequence that turns curiosity into a real connection &#8212; and a real customer. Four emails over 8 days.</p>
+
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; margin-top: 3rem;">
+      <div class="phase-card reveal">
+        <div class="phase-number">Email 01 &middot; Immediately</div>
+        <div class="phase-month" style="font-size: 1.2rem;">The Welcome</div>
+        <div class="phase-title">Who we are</div>
+        <ul class="phase-list">
+          <li>Warm, personal introduction</li>
+          <li>The FRNK story &#8212; why Steph started this</li>
+          <li>What makes the brand different</li>
+          <li>No hard sell &#8212; just a feeling</li>
+        </ul>
+      </div>
+      <div class="phase-card reveal">
+        <div class="phase-number">Email 02 &middot; Day 2</div>
+        <div class="phase-month" style="font-size: 1.2rem;">The Collection</div>
+        <div class="phase-title">What we make</div>
+        <ul class="phase-list">
+          <li>Walk through the hero styles</li>
+          <li>BALI, MYKONOS, PORTOFINO</li>
+          <li>Photography-forward</li>
+          <li>Give her something to want</li>
+        </ul>
+      </div>
+      <div class="phase-card reveal">
+        <div class="phase-number">Email 03 &middot; Day 5</div>
+        <div class="phase-month" style="font-size: 1.2rem;">The Making</div>
+        <div class="phase-title">Why it&#8217;s worth it</div>
+        <ul class="phase-list">
+          <li>Craftsmanship and materials</li>
+          <li>Why this isn&#8217;t fast fashion</li>
+          <li>Builds the price justification naturally</li>
+          <li>Before the offer, earn it</li>
+        </ul>
+      </div>
+      <div class="phase-card reveal">
+        <div class="phase-number">Email 04 &middot; Day 8</div>
+        <div class="phase-month" style="font-size: 1.2rem;">The Offer</div>
+        <div class="phase-title">Time to shop</div>
+        <ul class="phase-list">
+          <li>Giveaway entry or $off incentive</li>
+          <li>Scarcity note &#8212; sizes go fast</li>
+          <li>Direct, confident CTA</li>
+          <li>By now she&#8217;s warm &#8212; this lands</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-win-callout reveal" style="margin-top: 2rem; max-width: 700px;">
+      <div class="quick-win-label">Why this order</div>
+      <div class="quick-win-body">Email 1 is who we are. Email 3 is why it costs what it costs. By the time Email 4 arrives with an offer, she&#8217;s already a fan &#8212; not a skeptic. The progression matters.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ABANDONED CART ─── -->
+<section style="background: var(--cream); padding: 5rem 3rem;">
+  <div class="max-wrap">
+    <p class="section-label reveal">Flow 02</p>
+    <h2 class="section-headline reveal reveal-delay-1">Abandoned Cart.<br>This piece was made for you.</h2>
+    <p class="section-body reveal reveal-delay-2">Someone added a BALI to their cart and left. This happens constantly &#8212; life gets in the way. Three emails bring her back, each one earning the next.</p>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-top: 3rem;">
+      <div class="phase-card reveal">
+        <div class="phase-number">Email 01 &middot; 1&#8211;2 hours</div>
+        <div class="phase-month" style="font-size: 1.2rem;">The Reminder</div>
+        <div class="phase-title">Low pressure, just a nudge</div>
+        <ul class="phase-list">
+          <li>&#8220;You left something behind&#8221;</li>
+          <li>Clean, simple</li>
+          <li>Show the exact item she left</li>
+          <li>No hard sell &#8212; just the door back in</li>
+        </ul>
+      </div>
+      <div class="phase-card reveal">
+        <div class="phase-number">Email 02 &middot; 24 hours</div>
+        <div class="phase-month" style="font-size: 1.2rem;">The Craft</div>
+        <div class="phase-title">Justify the price</div>
+        <ul class="phase-list">
+          <li>What goes into making this piece</li>
+          <li>Materials, process, why it lasts</li>
+          <li>Photography + storytelling</li>
+          <li>If price is the hesitation, this answers it</li>
+        </ul>
+      </div>
+      <div class="phase-card reveal">
+        <div class="phase-number">Email 03 &middot; 72 hours</div>
+        <div class="phase-month" style="font-size: 1.2rem;">The Scarcity</div>
+        <div class="phase-title">Real urgency, not fake</div>
+        <ul class="phase-list">
+          <li>Limited quantities &#8212; genuinely true for FRNK</li>
+          <li>&#8220;Only 3 left in your size&#8221; if inventory allows</li>
+          <li>Final push, confident close</li>
+          <li>Optional: small offer if Steph approves</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ABANDONED BROWSE ─── -->
+<section style="background: var(--white); padding: 5rem 3rem;">
+  <div class="max-wrap">
+    <p class="section-label reveal">Flow 03</p>
+    <h2 class="section-headline reveal reveal-delay-1">Abandoned Browse.<br>You were looking at something.</h2>
+    <p class="section-body reveal reveal-delay-2">She visited the BALI page. Spent time there. Left without adding to cart. This flow catches her at that exact moment &#8212; interest without commitment &#8212; and gives her a reason to come back.</p>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-top: 3rem;">
+      <div class="phase-card reveal">
+        <div class="phase-number">Email 01 &middot; 4&#8211;6 hours</div>
+        <div class="phase-month" style="font-size: 1.2rem;">Still Thinking?</div>
+        <div class="phase-title">Soft, curious</div>
+        <ul class="phase-list">
+          <li>&#8220;Still thinking about [product]?&#8221;</li>
+          <li>Show more angles, more detail</li>
+          <li>Link back &#8212; make it easy</li>
+          <li>No pressure at all</li>
+        </ul>
+      </div>
+      <div class="phase-card reveal">
+        <div class="phase-number">Email 02 &middot; 48 hours</div>
+        <div class="phase-month" style="font-size: 1.2rem;">Meet Her Sisters</div>
+        <div class="phase-title">Cross-sell</div>
+        <ul class="phase-list">
+          <li>&#8220;If you loved BALI, meet MYKONOS&#8221;</li>
+          <li>Show related styles</li>
+          <li>Expand her consideration set</li>
+          <li>Some customers just need options</li>
+        </ul>
+      </div>
+      <div class="phase-card reveal">
+        <div class="phase-number">Email 03 &middot; 5 days</div>
+        <div class="phase-month" style="font-size: 1.2rem;">The Proof</div>
+        <div class="phase-title">Let customers speak</div>
+        <ul class="phase-list">
+          <li>Reviews, UGC, real stories</li>
+          <li>Someone wearing BALI somewhere beautiful</li>
+          <li>Social proof closes the loop</li>
+          <li>The best closer is another customer</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── POST-PURCHASE ─── -->
+<section style="background: var(--cream); padding: 5rem 3rem;">
+  <div class="max-wrap">
+    <p class="section-label reveal">Flow 04</p>
+    <h2 class="section-headline reveal reveal-delay-1">Post-Purchase.<br>She bought. Now make her a fan.</h2>
+    <p class="section-body reveal reveal-delay-2">The sale is step one. A customer who comes back is worth 3x a one-time buyer. These three emails turn a transaction into a relationship.</p>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-top: 3rem;">
+      <div class="phase-card reveal">
+        <div class="phase-number">Email 01 &middot; Immediately</div>
+        <div class="phase-month" style="font-size: 1.2rem;">The Moment</div>
+        <div class="phase-title">Confirm + celebrate</div>
+        <ul class="phase-list">
+          <li>Order confirmation + brand warmth</li>
+          <li>&#8220;You just got something rare&#8221;</li>
+          <li>Set expectations: delivery, care</li>
+          <li>Make her feel good about the choice</li>
+        </ul>
+      </div>
+      <div class="phase-card reveal">
+        <div class="phase-number">Email 02 &middot; Day 7</div>
+        <div class="phase-month" style="font-size: 1.2rem;">Care &amp; Style</div>
+        <div class="phase-title">Build the relationship</div>
+        <ul class="phase-list">
+          <li>How to wear it, how to care for it</li>
+          <li>Useful, not promotional</li>
+          <li>This email builds loyalty</li>
+          <li>Most brands skip this &#8212; we don&#8217;t</li>
+        </ul>
+      </div>
+      <div class="phase-card reveal">
+        <div class="phase-number">Email 03 &middot; Day 30&#8211;45</div>
+        <div class="phase-month" style="font-size: 1.2rem;">What&#8217;s Next</div>
+        <div class="phase-title">The cross-sell</div>
+        <ul class="phase-list">
+          <li>&#8220;Loved your BALI? MYKONOS is calling&#8221;</li>
+          <li>By now she&#8217;s worn it, loves it</li>
+          <li>This is the warmest cross-sell possible</li>
+          <li>One happy customer &#8594; two pieces</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── BEFORE WE BUILD (Intake Section) ─── -->
+<section style="background: var(--black); color: var(--cream); padding: 6rem 3rem;" id="kickoff-prep">
+  <div class="max-wrap">
+    <p class="section-label reveal" style="color: var(--sand);">Before We Build</p>
+    <h2 class="section-headline reveal reveal-delay-1" style="color: var(--cream);">A few things we need from you.<br>These are the only questions that matter.</h2>
+    <p class="section-body reveal reveal-delay-2" style="color: rgba(249,246,240,0.65);">We do the strategy, the writing, the design, the setup. All we need from you is answers to these. Victoria will walk through them on the kickoff call &#8212; nothing to prepare, just a conversation.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-top: 4rem;">
+
+      <!-- Brand & Voice -->
+      <div style="background: rgba(255,255,255,0.04); padding: 2.5rem; border-top: 2px solid rgba(255,255,255,0.1);" class="reveal">
+        <div class="invest-option">Your Brand</div>
+        <div class="invest-name" style="font-size: 1.3rem; margin-bottom: 1.5rem;">Voice &amp; Story</div>
+        <ul class="invest-list">
+          <li>How would you describe FRNK in 3 words?</li>
+          <li>What&#8217;s the story behind starting FRNK &#8212; the real one?</li>
+          <li>Who&#8217;s your ideal customer? How would you describe her?</li>
+          <li>What tone should emails feel like &#8212; intimate, aspirational, playful?</li>
+          <li>Is there anything you&#8217;d never want an email to say or sound like?</li>
+        </ul>
+      </div>
+
+      <!-- Photography & Content -->
+      <div style="background: rgba(255,255,255,0.04); padding: 2.5rem; border-top: 2px solid var(--sand);" class="reveal">
+        <div class="invest-option">Content</div>
+        <div class="invest-name" style="font-size: 1.3rem; margin-bottom: 1.5rem;">Photos &amp; Assets</div>
+        <ul class="invest-list">
+          <li>What photography do you have that we can use in emails?</li>
+          <li>Any video content, reels, or UGC from customers?</li>
+          <li>Do you have customer reviews or testimonials anywhere?</li>
+          <li>Are you comfortable using your own face/voice in emails?</li>
+          <li>Any shoots planned before summer that we should know about?</li>
+        </ul>
+      </div>
+
+      <!-- Signup Form & Offers -->
+      <div style="background: rgba(255,255,255,0.04); padding: 2.5rem; border-top: 2px solid rgba(255,255,255,0.1);" class="reveal">
+        <div class="invest-option">Signup &amp; Offers</div>
+        <div class="invest-name" style="font-size: 1.3rem; margin-bottom: 1.5rem;">Incentives &amp; Discounts</div>
+        <ul class="invest-list">
+          <li>Are you comfortable running a &#8220;Win a BALI&#8221; giveaway? Do you have the inventory?</li>
+          <li>What&#8217;s your feeling on discounting? Protective of price, or open to offers for conversion?</li>
+          <li>Any upcoming sales, restocks, or launches we should build around?</li>
+          <li>Is there a scarcity element you&#8217;re comfortable using? (e.g. &#8220;only 3 left in your size&#8221;)</li>
+        </ul>
+      </div>
+
+      <!-- Technical -->
+      <div style="background: rgba(255,255,255,0.04); padding: 2.5rem; border-top: 2px solid rgba(255,255,255,0.1);" class="reveal">
+        <div class="invest-option">Technical</div>
+        <div class="invest-name" style="font-size: 1.3rem; margin-bottom: 1.5rem;">Access &amp; Setup</div>
+        <ul class="invest-list">
+          <li>Are you the main Klaviyo admin? Can we get full access?</li>
+          <li>Anyone else we should loop in &#8212; an assistant, ops, anyone?</li>
+          <li>Are there any flows currently live that we should know about before we touch anything?</li>
+          <li>Is your Shopify connected to Klaviyo? (We&#8217;ll check, just good to know what you know)</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div style="margin-top: 3rem; padding: 1.5rem 2rem; background: rgba(201, 182, 144, 0.08); border-left: 2px solid var(--sand);" class="reveal">
+      <p style="font-family: 'Fraunces', serif; font-style: italic; font-size: 1rem; color: rgba(249,246,240,0.75); font-weight: 300; line-height: 1.7;">
+        &#8220;There are no wrong answers here. We&#8217;ve built these systems for dozens of brands. We&#8217;ll take whatever you give us and turn it into something that works. The goal of this conversation is to make everything we build feel unmistakably like FRNK.&#8221;
+      </p>
+    </div>
+  </div>
+</section>
 
   <!-- ─── FOOTER ─── -->
   <footer>
